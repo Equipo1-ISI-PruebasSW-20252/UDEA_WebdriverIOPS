@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@wdio/cucumber-framework";
 
-import LoginPage from '../pageobjects/login.page.js';
+import LoginPage from "../pageobjects/login.page.js";
 
 const pages = {
   login: LoginPage,
@@ -18,11 +18,11 @@ When(/^I login with (\w+) and (.+)$/, async (username, password) => {
 Then(/^I should see a text saying (.*)$/, async (message) => {
   if (message == "Error!") {
     // invalid username or password
-    await expect($('.title')).toBeExisting();
-    await expect($('.title')).toHaveTextContaining(message);
+    await expect($(".title")).toBeExisting();
+    await expect($(".title")).toHaveTextContaining(message);
   } else {
     // valid username or password
-    await expect($('.title')).toBeExisting();
-    await expect($('.title')).toHaveTextContaining(message);
+    await expect($(".title")).toBeExisting();
+    await expect($(".title")).toHaveTextContaining(message);
   }
 });

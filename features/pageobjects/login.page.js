@@ -1,4 +1,5 @@
 import Page from "./page.js";
+import { ROUTES } from "../../utils/constants.js";
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -8,15 +9,47 @@ class LoginPage extends Page {
    * define selectors using getter methods
    */
   get inputUsername() {
-    return $("#loginPanel > form > div:nth-child(2) > input");
+    return $("input[name='username']");
   }
 
   get inputPassword() {
-    return $("#loginPanel > form > div:nth-child(4) > input");
+    return $("input[name='password']");
   }
 
+  /**
+   * a submit button element inside the login form without direct child combinator
+   */
   get btnSubmit() {
-    return $("#loginPanel > form > div:nth-child(5) > input");
+    return $("form[name='login'] input[type='submit']");
+  }
+
+  /**
+   * check if the login button is enabled
+   */
+  async isLoginButtonEnabled() {
+    return await this.btnSubmit.isEnabled();
+  }
+
+  /**
+   * clear all input fields
+   */
+  async clearFields() {
+    await this.inputUsername.clearValue();
+    await this.inputPassword.clearValue();
+  }
+
+  /**
+   * set only username field
+   */
+  async setUsername(username) {
+    await this.inputUsername.setValue(username);
+  }
+
+  /**
+   * set only password field
+   */
+  async setPassword(password) {
+    await this.inputPassword.setValue(password);
   }
 
   /**
@@ -33,7 +66,7 @@ class LoginPage extends Page {
    * overwrite specific options to adapt it to page object
    */
   open() {
-    return super.open("index");
+    return super.open(ROUTES.ROOT_LOGIN);
   }
 }
 

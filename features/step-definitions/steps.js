@@ -1,6 +1,7 @@
 import { Given, When, Then } from "@wdio/cucumber-framework";
 
 import LoginPage from "../pageobjects/login.page.js";
+import AccountsOverviewPage from "../pageobjects/accounts-overview.page.js";
 
 const pages = {
   login: LoginPage,
@@ -47,4 +48,20 @@ Then(/^the login button should be disabled$/, async () => {
 Then(/^the login button should be enabled$/, async () => {
   const isEnabled = await LoginPage.isLoginButtonEnabled();
   await expect(isEnabled).toBe(true);
+});
+
+// CHECK STATUS - Accounts Overview
+Then(/^I should see the accounts overview table$/, async () => {
+  const isDisplayed = await AccountsOverviewPage.isAccountsTableDisplayed();
+  await expect(isDisplayed).toBe(true);
+});
+
+Then(/^I should see at least one account listed$/, async () => {
+  const count = await AccountsOverviewPage.getAccountsCount();
+  await expect(count).toBeGreaterThan(0);
+});
+
+Then(/^each account should display a balance$/, async () => {
+  const hasBalances = await AccountsOverviewPage.allAccountsHaveBalance();
+  await expect(hasBalances).toBe(true);
 });

@@ -8,7 +8,7 @@ Feature: Para Bank Login Feature
   Scenario: Login button should be disabled when only username is filled
     Given I am on the login page
     When I clear all login fields
-    And I enter username "josewaldo"
+    And I enter username "john"
     Then the login button should be disabled
 
   Scenario: Login button should be disabled when only password is filled
@@ -20,7 +20,7 @@ Feature: Para Bank Login Feature
   Scenario: Login button should be enabled when both fields are filled
     Given I am on the login page
     When I clear all login fields
-    And I enter username "josewaldo"
+    And I enter username "john"
     And I enter password "demo"
     Then the login button should be enabled
 
@@ -32,4 +32,4 @@ Feature: Para Bank Login Feature
     Examples:
       | username        | password | message           |
       | invalidUsername | password | Error!            |
-      | josewaldo       | demo     | Accounts Overview |
+      | john            | demo     | Accounts Overview |

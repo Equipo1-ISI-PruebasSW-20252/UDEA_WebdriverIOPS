@@ -314,7 +314,7 @@ export const config = {
   afterCommand: async function (commandName, args, result, error) {
     // Agregar una pausa de 500ms después de cada comando para ralentizar la ejecución
     // Puedes ajustar este valor: 500ms = 0.5 segundos, 1000ms = 1 segundo
-    await browser.pause(100);
+    await browser.pause(50);
   },
   /**
    * Gets executed after all tests are done. You still have access to all global variables from

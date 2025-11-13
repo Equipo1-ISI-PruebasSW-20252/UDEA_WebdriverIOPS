@@ -23,8 +23,8 @@ export const config = {
   // will be called from there.
   //
   specs: [
-    //"./features/**/login.feature",
-    //"./features/**/check-status.feature",
+    "./features/**/login.feature",
+    "./features/**/check-status.feature",
     "./features/**/transfer-funds.feature",
   ],
   // Patterns to exclude.

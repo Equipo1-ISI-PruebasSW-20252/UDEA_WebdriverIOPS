@@ -49,51 +49,39 @@ class AccountsOverviewPage extends Page {
    * tenga 3 columnas y la del medio contenga el símbolo $
    */
   async allAccountsHaveBalance() {
-    console.log("🔍 Verificando que todas las cuentas tengan balance...");
-
     // Esperar a que las filas existan
     await this.firstAccountRow.waitForExist({ timeout: 5000 });
 
     // Obtener todas las filas
     const rows = await this.accountRows;
-    console.log("📊 Total de filas a verificar:", rows.length);
 
     if (rows.length === 0) {
-      console.log("❌ No se encontraron filas");
       return false;
     }
 
     // Iterar sobre todas las filas EXCEPTO la última (que es "Total")
     const accountRowsOnly = rows.slice(0, -1);
-    console.log("📊 Filas de cuentas (sin Total):", accountRowsOnly.length);
 
     for (let i = 0; i < accountRowsOnly.length; i++) {
       const row = accountRowsOnly[i];
 
-      // Obtener todas las columnas <td> de esta fila
+      // Obtener todas las columnas de esta fila
       const columns = await row.$$("td");
-      console.log(`  Fila ${i + 1}: ${columns.length} columnas`);
 
       // Verificar que tenga exactamente 3 columnas
       if (columns.length !== 3) {
-        console.log(`  ❌ Fila ${i + 1} no tiene 3 columnas`);
         return false;
       }
 
-      // Obtener el texto de la columna del medio (índice 1 = Balance)
+      // Obtener el texto de la columna del balance (índice 1)
       const balanceText = await columns[1].getText();
-      console.log(`  Balance en fila ${i + 1}: "${balanceText}"`);
 
       // Verificar que contenga el símbolo $
       if (!balanceText.includes("$")) {
-        console.log(`  ❌ Fila ${i + 1} no tiene símbolo $ en el balance`);
         return false;
       }
-
-      console.log(`  ✅ Fila ${i + 1} válida`);
     }
 
-    console.log("✅ Todas las cuentas tienen balance correctamente");
     return true;
   }
 

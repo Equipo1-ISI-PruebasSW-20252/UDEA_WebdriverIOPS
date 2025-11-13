@@ -22,7 +22,11 @@ export const config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ["./features/**/login.feature", "./features/**/check-status.feature"],
+  specs: [
+    //"./features/**/login.feature",
+    //"./features/**/check-status.feature",
+    "./features/**/transfer-funds.feature",
+  ],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -58,6 +62,13 @@ export const config = {
       //
       browserName: "chrome",
       acceptInsecureCerts: true,
+      // Chrome options para ralentizar la ejecución visualmente
+      "goog:chromeOptions": {
+        args: [
+          "--disable-gpu", // Deshabilitar aceleración GPU para mejor visualización
+          "--window-size=1280,720", // Tamaño de ventana definido
+        ],
+      },
       // If outputDir is provided WebdriverIO can capture driver session logs
       // it is possible to configure which logTypes to include/exclude.
       // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
@@ -142,6 +153,7 @@ export const config = {
     require: [
       "./features/step-definitions/login.steps.js",
       "./features/step-definitions/check-status.steps.js",
+      "./features/step-definitions/transfer-funds.steps.js",
     ],
     // <boolean> show full backtrace for errors
     backtrace: false,
@@ -299,8 +311,11 @@ export const config = {
    * @param {Number} result 0 - command success, 1 - command error
    * @param {Object} error error object if any
    */
-  // afterCommand: function (commandName, args, result, error) {
-  // },
+  afterCommand: async function (commandName, args, result, error) {
+    // Agregar una pausa de 500ms después de cada comando para ralentizar la ejecución
+    // Puedes ajustar este valor: 500ms = 0.5 segundos, 1000ms = 1 segundo
+    await browser.pause(100);
+  },
   /**
    * Gets executed after all tests are done. You still have access to all global variables from
    * the test.

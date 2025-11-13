@@ -275,8 +275,14 @@ export const config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {Object}                 context          Cucumber World object
    */
-  // afterScenario: function (world, result, context) {
-  // },
+  afterScenario: async function (world, result, context) {
+    // Limpiar cookies y session storage después de cada escenario
+    await browser.deleteAllCookies();
+    await browser.execute(() => {
+      sessionStorage.clear();
+      localStorage.clear();
+    });
+  },
   /**
    *
    * Runs after a Cucumber Feature.

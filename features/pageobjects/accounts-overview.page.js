@@ -86,6 +86,52 @@ class AccountsOverviewPage extends Page {
   }
 
   /**
+   * click on the first account link
+   */
+  async clickFirstAccount() {
+    // Esperar a que exista la primera fila
+    await this.firstAccountRow.waitForExist({ timeout: 5000 });
+
+    // Obtener el link dentro de la primera columna de la primera fila
+    const firstAccountLink = await this.firstAccountRow.$("td:first-child a");
+
+    // Click en el link
+    await firstAccountLink.click();
+  }
+
+  /**
+   * click on the second account link
+   */
+  async clickSecondAccount() {
+    // Esperar a que existan las filas
+    await this.firstAccountRow.waitForExist({ timeout: 5000 });
+
+    // Obtener todas las filas (excepto la última que es Total)
+    const rows = await this.accountRows;
+    const accountRowsOnly = rows.slice(0, -1);
+
+    // Verificar que existe una segunda cuenta
+    if (accountRowsOnly.length < 2) {
+      throw new Error("No hay segunda cuenta disponible");
+    }
+
+    // Obtener el link de la segunda fila
+    const secondAccountLink = await accountRowsOnly[1].$("td:first-child a");
+
+    // Click en el link
+    await secondAccountLink.click();
+  }
+
+  /**
+   * check if user is on account details page
+   */
+  async isOnAccountDetailsPage() {
+    // Verificar que la URL contiene "activity.htm?id="
+    const currentUrl = await browser.getUrl();
+    return currentUrl.includes("activity.htm?id=");
+  }
+
+  /**
    * overwrite specific options to adapt it to page object
    */
   open() {

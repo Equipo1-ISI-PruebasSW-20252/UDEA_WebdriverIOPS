@@ -2,8 +2,8 @@
 
 ## Cómo ejecutar las pruebas
 
-1. Clonar este repositorio (`git clone https://github.com/daniwira/test-webdriverio.git`)
-2. Navegar a la raíz del proyecto e instalar dependencias (`cd webdriverio-parabank && npm i`)
+1. Clonar este repositorio (`git clone https://github.com/Equipo1-ISI-PruebasSW-20252/UDEA_WebdriverIOPS.git`)
+2. Navegar a la raíz del proyecto e instalar dependencias (`cd UDEA_WebdriverIOPS && npm i`)
 3. Ejecutar todas las pruebas: `npx wdio wdio.conf.js`
 
 ## Features Implementadas

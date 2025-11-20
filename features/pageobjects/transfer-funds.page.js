@@ -44,6 +44,10 @@ class TransferFundsPage extends Page {
     return $(".error");
   }
 
+  get transferErrorMessage() {
+    return $("#showError");
+  }
+
   /**
    * Method to perform a fund transfer
    * @param {string} amount - Amount to transfer
@@ -93,7 +97,9 @@ class TransferFundsPage extends Page {
    * @returns {boolean} - True if transfer success message is displayed
    */
   async isTransferSuccessful() {
-    return await this.transferSuccessMessage.isDisplayed();
+    await this.transferSuccessMessage.waitForDisplayed({ timeout: 5000 });
+    const text = await this.transferSuccessMessage.getText();
+    return text.includes("Transfer Complete!");
   }
 
   /**
@@ -101,6 +107,7 @@ class TransferFundsPage extends Page {
    * @returns {string} - The amount transferred
    */
   async getTransferredAmount() {
+    await this.amountResult.waitForDisplayed({ timeout: 5000 });
     return await this.amountResult.getText();
   }
 
@@ -109,6 +116,7 @@ class TransferFundsPage extends Page {
    * @returns {string} - The source account ID
    */
   async getFromAccountId() {
+    await this.fromAccountIdResult.waitForDisplayed({ timeout: 5000 });
     return await this.fromAccountIdResult.getText();
   }
 
@@ -117,6 +125,7 @@ class TransferFundsPage extends Page {
    * @returns {string} - The destination account ID
    */
   async getToAccountId() {
+    await this.toAccountIdResult.waitForDisplayed({ timeout: 5000 });
     return await this.toAccountIdResult.getText();
   }
 
@@ -126,9 +135,39 @@ class TransferFundsPage extends Page {
    */
   async hasError() {
     try {
+      // First, try to check for the general error container
+      const hasErrorContainer = await this.transferErrorMessage
+        .isDisplayed()
+        .catch(() => false);
+      if (hasErrorContainer) {
+        return true;
+      }
+
+      // If not found, check for .error class elements
+      await this.errorMessage.waitForDisplayed({ timeout: 5000 });
       return await this.errorMessage.isDisplayed();
     } catch (error) {
       return false;
+    }
+  }
+
+  /**
+   * Method to get the error message text
+   * @returns {string} - The error message text
+   */
+  async getErrorMessage() {
+    try {
+      const hasErrorContainer = await this.transferErrorMessage
+        .isDisplayed()
+        .catch(() => false);
+      if (hasErrorContainer) {
+        return await this.transferErrorMessage.getText();
+      }
+
+      await this.errorMessage.waitForDisplayed({ timeout: 5000 });
+      return await this.errorMessage.getText();
+    } catch (error) {
+      return "";
     }
   }
 

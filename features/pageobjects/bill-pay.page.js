@@ -56,6 +56,10 @@ class BillPayPage extends Page {
     return $("#billpayResult");
   }
 
+  get paymentErrorMessage() {
+    return $("#billpayError");
+  }
+
   get paymentAmountResult() {
     return $("#amount");
   }
@@ -235,7 +239,8 @@ class BillPayPage extends Page {
   async isPaymentSuccessful() {
     try {
       await this.paymentSuccessMessage.waitForDisplayed({ timeout: 5000 });
-      return await this.paymentSuccessMessage.isDisplayed();
+      const text = await this.paymentSuccessMessage.getText();
+      return text.includes("Bill Payment Complete");
     } catch (error) {
       return false;
     }
@@ -274,12 +279,32 @@ class BillPayPage extends Page {
    */
   async hasValidationErrors() {
     try {
-      const nameError = await this.errorPayeeName.isDisplayed();
-      const addressError = await this.errorAddress.isDisplayed();
-      const cityError = await this.errorCity.isDisplayed();
-      const stateError = await this.errorState.isDisplayed();
-      const zipCodeError = await this.errorZipCode.isDisplayed();
-      const phoneError = await this.errorPhoneNumber.isDisplayed();
+      // Wait a bit for validation to trigger
+      await browser.pause(500);
+
+      const nameError = await this.errorPayeeName
+        .isDisplayed()
+        .catch(() => false);
+      const addressError = await this.errorAddress
+        .isDisplayed()
+        .catch(() => false);
+      const cityError = await this.errorCity.isDisplayed().catch(() => false);
+      const stateError = await this.errorState.isDisplayed().catch(() => false);
+      const zipCodeError = await this.errorZipCode
+        .isDisplayed()
+        .catch(() => false);
+      const phoneError = await this.errorPhoneNumber
+        .isDisplayed()
+        .catch(() => false);
+      const accountError = await this.errorAccountEmpty
+        .isDisplayed()
+        .catch(() => false);
+      const verifyAccountError = await this.errorVerifyAccountEmpty
+        .isDisplayed()
+        .catch(() => false);
+      const amountError = await this.errorAmountEmpty
+        .isDisplayed()
+        .catch(() => false);
 
       return (
         nameError ||
@@ -287,7 +312,10 @@ class BillPayPage extends Page {
         cityError ||
         stateError ||
         zipCodeError ||
-        phoneError
+        phoneError ||
+        accountError ||
+        verifyAccountError ||
+        amountError
       );
     } catch (error) {
       return false;
@@ -300,6 +328,7 @@ class BillPayPage extends Page {
    */
   async hasAccountMismatchError() {
     try {
+      await this.errorVerifyAccountMismatch.waitForDisplayed({ timeout: 3000 });
       return await this.errorVerifyAccountMismatch.isDisplayed();
     } catch (error) {
       return false;
@@ -312,7 +341,22 @@ class BillPayPage extends Page {
    */
   async hasInvalidAmountError() {
     try {
+      await this.errorAmountInvalid.waitForDisplayed({ timeout: 3000 });
       return await this.errorAmountInvalid.isDisplayed();
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Method to check if payment error message is displayed (general error)
+   * @returns {boolean} - True if payment error message is displayed
+   */
+  async hasPaymentError() {
+    try {
+      await this.paymentErrorMessage.waitForDisplayed({ timeout: 5000 });
+      const text = await this.paymentErrorMessage.getText();
+      return text.includes("Error!");
     } catch (error) {
       return false;
     }

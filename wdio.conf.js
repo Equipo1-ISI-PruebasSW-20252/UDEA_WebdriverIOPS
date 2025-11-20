@@ -23,10 +23,11 @@ export const config = {
   // will be called from there.
   //
   specs: [
-    //"./features/**/login.feature",
-    //"./features/**/check-status.feature",
-    //"./features/**/transfer-funds.feature",
+    "./features/**/login.feature",
+    "./features/**/check-status.feature",
+    "./features/**/transfer-funds.feature",
     "./features/**/bill-pay.feature",
+    "./features/**/request-loan.feature",
   ],
   // Patterns to exclude.
   exclude: [
@@ -156,6 +157,7 @@ export const config = {
       "./features/step-definitions/check-status.steps.js",
       "./features/step-definitions/transfer-funds.steps.js",
       "./features/step-definitions/bill-pay.steps.js",
+      "./features/step-definitions/request-loan.steps.js",
     ],
     // <boolean> show full backtrace for errors
     backtrace: false,
@@ -316,7 +318,7 @@ export const config = {
   afterCommand: async function (commandName, args, result, error) {
     // Agregar una pausa de 500ms después de cada comando para ralentizar la ejecución
     // Puedes ajustar este valor: 500ms = 0.5 segundos, 1000ms = 1 segundo
-    await browser.pause(10);
+    await browser.pause(1);
   },
   /**
    * Gets executed after all tests are done. You still have access to all global variables from
